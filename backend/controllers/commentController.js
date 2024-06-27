@@ -14,8 +14,18 @@ exports.showAllComments = asyncHandler(async (req,res,next)=>{
 exports.createComment = asyncHandler(async (req, res, next)=>{
     const {comment_content} = req.body;
     const time = new Date().getTime();
-    
-
+    const user = req.user;
+    const idOfUser = user.id;
+    const commentAuthor = new COMMENT_AUTH({user : idOfUser});
+    await commentAuthor.save();
+    const comment = {
+        comment_content : comment_content,
+        author : commentAuthor._id,
+        time : time
+    }
+    const newComment = new COMMENT(comment);
+    await newComment.save();
+    res.status(200).json("comment added");
 })
 
 exports.showOneComment = asyncHandler(async (req, res, next) => {

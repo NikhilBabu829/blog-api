@@ -6,11 +6,12 @@ const passport = require("passport");
 //USER ROUTES
 exports.view_Users = asyncHandler(async (req,res,next)=>{
     const users = await USER.find();
-    res.json(users);
-})
-
-exports.login_User = asyncHandler(async (req, res, next)=>{
-    res.json({"success" : "true"})
+    if(req.user !== undefined){
+        res.json(users);
+    }
+    else{
+        
+    }
 })
 
 exports.user_Sign_Up = asyncHandler(async (req,res,next)=>{
