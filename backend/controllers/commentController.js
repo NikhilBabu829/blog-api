@@ -44,5 +44,10 @@ exports.deleteComment = asyncHandler(async (req, res, next)=>{
 })
 
 exports.updateComment = asyncHandler(async (req, res, next)=>{
-
+    const {comment_content} = req.body;
+    const {id} = req.params;
+    const comment = await COMMENT.findById(id);
+    comment.comment_content = comment_content
+    const updateComment = await COMMENT.findByIdAndUpdate(id, comment);
+    res.json("updated comment");
 })

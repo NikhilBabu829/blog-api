@@ -10,7 +10,7 @@ exports.view_Users = asyncHandler(async (req,res,next)=>{
         res.json(users);
     }
     else{
-        
+
     }
 })
 
@@ -27,8 +27,6 @@ exports.user_Sign_Up = asyncHandler(async (req,res,next)=>{
                 res.json(err);
             }
             else{
-                console.log(password)
-                console.log(hashedPassword)
                 const user = new USER({username : username, password : hashedPassword});
                 await user.save();
                 res.redirect("/api/view-users");
