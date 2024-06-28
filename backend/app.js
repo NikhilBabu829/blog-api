@@ -12,6 +12,7 @@ const session = require('express-session');
 require('dotenv').config();
 
 const USER = require("./models/user");
+const AUTHOR = require("./models/author");
 
 var apiRouter = require('./routes/api');
 
@@ -38,7 +39,7 @@ async function main(){
 
 app.use('/api', apiRouter);
 
-passport.use(new LocalStrategy(async (users, pass, done)=>{
+passport.use("user-local", new LocalStrategy(async (users, pass, done)=>{
   try{
     const user = await USER.findOne({username : users});
     if(!user){
@@ -55,14 +56,32 @@ passport.use(new LocalStrategy(async (users, pass, done)=>{
   }
 }))
 
-passport.serializeUser((user,done)=>{
-  done(null, user.id);
+passport.use("author-local", new LocalStrategy(async (users, pass, done)=>{
+  try{
+    const author = await AUTHOR.findOne({username : users});
+    if(!author){
+      return done(null, false, {message : "Username is incorrect"});
+    }
+    const match = await bcrypt.compare(pass, author.password);
+    if(!match){
+      return done(null, false, {message : "Password is incorrect"})
+    }
+    return done(null, author);
+  }
+  catch(err){
+    return done(err)
+  }
+}))
+
+passport.serializeUser((entity,done)=>{
+  done(null, {id : entity.id, type : entity.constructor.modelName});
 })
 
-passport.deserializeUser(async (id, done)=>{
+passport.deserializeUser(async (obj, done)=>{
   try{
-    const user = await USER.findById(id);
-    return done(null, user);
+    const Model = obj.type === "User" ? USER : AUTHOR;
+    const person = await Model.findById(obj.id);
+    return done(null, person);
   }
   catch(err){
     done(err);

@@ -6,12 +6,7 @@ const passport = require("passport");
 //USER ROUTES
 exports.view_Users = asyncHandler(async (req,res,next)=>{
     const users = await USER.find();
-    if(req.user !== undefined){
-        res.json(users);
-    }
-    else{
-
-    }
+    res.json(users);
 })
 
 exports.user_Sign_Up = asyncHandler(async (req,res,next)=>{
@@ -29,7 +24,7 @@ exports.user_Sign_Up = asyncHandler(async (req,res,next)=>{
             else{
                 const user = new USER({username : username, password : hashedPassword});
                 await user.save();
-                res.redirect("/api/view-users");
+                res.status(200).json({"message" : "User created successfully", user});
             }
         })
     }
@@ -60,7 +55,7 @@ exports.update_User = asyncHandler(async (req, res, next)=>{
                     password :  hashedPassword
                 }
                 const updatedUser = await USER.findByIdAndUpdate(req.params.id, updateUser);
-                res.json(updateUser);
+                res.json(updatedUser);
             }
         })
     }
@@ -75,7 +70,7 @@ exports.delete_User = asyncHandler(async (req, res, next)=>{
     const user = await USER.findById(req.params.id);
     if(user){
         await USER.findByIdAndDelete(req.params.id);
-        res.json({message : "User deleted successfully"});
+        res.json({message : "User deleted successfully", user});
     }
     else{
         res.status(404);

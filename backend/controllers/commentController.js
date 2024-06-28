@@ -11,7 +11,6 @@ exports.showAllComments = asyncHandler(async (req,res,next)=>{
     res.json(comments);
 })
 
-//TODO needs validation
 exports.createComment = asyncHandler(async (req, res, next)=>{
     const {comment_content} = req.body;
     const time = new Date().getTime();
@@ -26,13 +25,13 @@ exports.createComment = asyncHandler(async (req, res, next)=>{
     }
     const newComment = new COMMENT(comment);
     await newComment.save();
-    res.status(200).json("comment added");
+    res.status(200).json({"message" : "comment added", newComment});
 })
 
 exports.showOneComment = asyncHandler(async (req, res, next) => {
     const comment = await COMMENT.findById(req.params.id);
     if(comment){
-        res.json(comment);
+        res.json({comment});
     }
     else{
         res.status(404);
@@ -40,20 +39,18 @@ exports.showOneComment = asyncHandler(async (req, res, next) => {
     }
 })
 
-//TODO needs protection
 exports.deleteComment = asyncHandler(async (req, res, next)=>{
     const deletedComment = await COMMENT.findByIdAndDelete(req.params.id);
+    res.json({"message" : "deleted successfully", deletedComment})
 })
 
-
-//TODO needs protection
 exports.updateComment = asyncHandler(async (req, res, next)=>{
     const {comment_content} = req.body;
     const {id} = req.params;
     const comment = await COMMENT.findById(id);
     comment.comment_content = comment_content
     const updateComment = await COMMENT.findByIdAndUpdate(id, comment);
-    res.json("updated comment");
+    res.json({"message" : "updated comment", updateComment});
 })
 
 //TODO create a route where we add the newly created comment to it's appropriate route

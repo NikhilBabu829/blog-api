@@ -21,7 +21,7 @@ exports.createAuthor = asyncHandler(async (req, res)=>{
                     password: hashedPassword
                 })
                 await author.save();
-                res.status(200).json({"message" : "Author created successfully"});
+                res.status(200).json({"message" : "Author created successfully", author});
             }
         })
     }
@@ -45,7 +45,7 @@ exports.editAuthor = asyncHandler(async (req, res)=>{
                 else{
                     author.password = hashedPassword;
                     const updatedAuthor = await AUTHOR.findByIdAndUpdate(id, author);
-                    res.status(200).json({"message" : "Author updated successfully"});
+                    res.status(200).json({"message" : "Author updated successfully", updatedAuthor});
                 }
             })
         }
@@ -58,7 +58,7 @@ exports.deleteAuthor = asyncHandler(async (req, res)=>{
     const {id} = req.params;
     const author = await AUTHOR.findByIdAndDelete(id);
     if(author){
-        res.status(200).json({"message" : "Author deleted successfully"});
+        res.status(200).json({"message" : "Author deleted successfully", author});
     }
 })
 

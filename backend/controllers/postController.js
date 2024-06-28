@@ -1,7 +1,6 @@
 const POST = require("../models/post");
 const asyncHandler = require("express-async-handler");
 
-//TODO needs protecting
 exports.createPost = asyncHandler(async (req, res)=>{
     const {title, content} = req.body;
     const time = new Date().getTime();
@@ -31,8 +30,6 @@ exports.getPost = asyncHandler(async (req, res)=>{
     }
 })
 
-
-//TODO needs validation
 exports.editPost = asyncHandler(async (req, res)=>{
     const {id} = req.params;
     const post = await POST.findById(id);
@@ -46,8 +43,6 @@ exports.editPost = asyncHandler(async (req, res)=>{
     } 
 })
 
-
-//TODO needs validation
 exports.deletePost = asyncHandler(async (req, res)=>{
     const {id} = req.params;
     const deletedPost =  await POST.findByIdAndDelete(id);
