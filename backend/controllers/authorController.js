@@ -17,6 +17,7 @@ exports.createAuthor = asyncHandler(async (req, res)=>{
                 const author = new AUTHOR({
                     first_name,
                     last_name,
+                    cannotPost : false,
                     username,
                     password: hashedPassword
                 })
@@ -27,8 +28,6 @@ exports.createAuthor = asyncHandler(async (req, res)=>{
     }
 })
 
-
-//TODO needs protecting
 exports.editAuthor = asyncHandler(async (req, res)=>{
     const {id} = req.params;
     const author = await AUTHOR.findById(id);
@@ -53,7 +52,6 @@ exports.editAuthor = asyncHandler(async (req, res)=>{
 })
 
 
-//TODO needs protecting
 exports.deleteAuthor = asyncHandler(async (req, res)=>{
     const {id} = req.params;
     const author = await AUTHOR.findByIdAndDelete(id);

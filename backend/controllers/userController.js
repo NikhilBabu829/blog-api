@@ -22,7 +22,7 @@ exports.user_Sign_Up = asyncHandler(async (req,res,next)=>{
                 res.json(err);
             }
             else{
-                const user = new USER({username : username, password : hashedPassword});
+                const user = new USER({username : username, password : hashedPassword, cannotPost : true});
                 await user.save();
                 res.status(200).json({"message" : "User created successfully", user});
             }
@@ -41,7 +41,6 @@ exports.view_User = asyncHandler(async (req, res, next)=>{
     }
 })
 
-//TODO needs protecting
 exports.update_User = asyncHandler(async (req, res, next)=>{
     const user = await USER.findById(req.params.id);
     if(user){
@@ -65,7 +64,6 @@ exports.update_User = asyncHandler(async (req, res, next)=>{
     }
 })
 
-//TODO needs protecting
 exports.delete_User = asyncHandler(async (req, res, next)=>{
     const user = await USER.findById(req.params.id);
     if(user){
