@@ -40,17 +40,31 @@ exports.showOneComment = asyncHandler(async (req, res, next) => {
 })
 
 exports.deleteComment = asyncHandler(async (req, res, next)=>{
-    const deletedComment = await COMMENT.findByIdAndDelete(req.params.id);
-    res.json({"message" : "deleted successfully", deletedComment})
+    const {id} = req.params;
+    const comment = await COMMENT.findById(id);
+    if(comment){
+        if(comment.author == req.user._id){
+            const deletedComment = await COMMENT.findByIdAndDelete(req.params.id);
+            res.json({"message" : "deleted successfully", deletedComment})
+        }
+        else{
+            res.status(401).json({message : "Unauthorised to delete"})
+        }
+    }
 })
 
 exports.updateComment = asyncHandler(async (req, res, next)=>{
     const {comment_content} = req.body;
     const {id} = req.params;
     const comment = await COMMENT.findById(id);
-    comment.comment_content = comment_content
-    const updateComment = await COMMENT.findByIdAndUpdate(id, comment);
-    res.json({"message" : "updated comment", updateComment});
+    if(comment){
+        if(comment.author == req.user._id){
+            comment.comment_content = comment_content
+            const updateComment = await COMMENT.findByIdAndUpdate(id, comment);
+            res.json({"message" : "updated comment", updateComment});
+        }
+        else{
+            res.status(401).json({message : "Unauthorised to update"})
+        }
+    }
 })
-
-//TODO create a route where we add the newly created comment to it's appropriate route
