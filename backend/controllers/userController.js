@@ -46,6 +46,7 @@ exports.view_User = asyncHandler(async (req, res, next)=>{
     }
 })
 
+//TODO needs protecting
 exports.update_User = asyncHandler(async (req, res, next)=>{
     const user = await USER.findById(req.params.id);
     if(user){
@@ -69,6 +70,7 @@ exports.update_User = asyncHandler(async (req, res, next)=>{
     }
 })
 
+//TODO needs protecting
 exports.delete_User = asyncHandler(async (req, res, next)=>{
     const user = await USER.findById(req.params.id);
     if(user){

@@ -3,8 +3,8 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 
 exports.createAuthor = asyncHandler(async (req, res)=>{
-    const {first_name, last_name, email, password} = req.body;
-    const check = await AUTHOR.findOne({email: email});
+    const {first_name, last_name, username, password} = req.body;
+    const check = await AUTHOR.findOne({username: username});
     if(check){
         res.status(400).json({"message" : "User already exists"});
     } 
@@ -17,7 +17,7 @@ exports.createAuthor = asyncHandler(async (req, res)=>{
                 const author = new AUTHOR({
                     first_name,
                     last_name,
-                    email,
+                    username,
                     password: hashedPassword
                 })
                 await author.save();
@@ -27,14 +27,16 @@ exports.createAuthor = asyncHandler(async (req, res)=>{
     }
 })
 
+
+//TODO needs protecting
 exports.editAuthor = asyncHandler(async (req, res)=>{
     const {id} = req.params;
     const author = await AUTHOR.findById(id);
     if(author){
-        const {first_name, last_name, email, password} = req.body;
+        const {first_name, last_name, username, password} = req.body;
         author.first_name = first_name;
         author.last_name = last_name;
-        author.email = email;
+        author.username = username;
         if(password){
             bcrypt.hash(password, 10, async(err, hashedPassword)=>{
                 if(err){
@@ -50,6 +52,8 @@ exports.editAuthor = asyncHandler(async (req, res)=>{
     }
 })
 
+
+//TODO needs protecting
 exports.deleteAuthor = asyncHandler(async (req, res)=>{
     const {id} = req.params;
     const author = await AUTHOR.findByIdAndDelete(id);

@@ -18,8 +18,8 @@ function authMiddleWare(req, res, next){
   })
 }
 
-//USER ROUTES
-router.post("/user-login", passport.authenticate("local", {session : false}), (req, res)=>{
+// //USER ROUTES
+router.post("/user-login" || "/author-login", passport.authenticate("local", {session : false}), (req, res)=>{
   const user = req.user;
   const token = jwt.sign({id : user.id, username : user.username}, process.env.JWT_SECRET);
   return res.json({token});
@@ -47,6 +47,7 @@ router.get("/view-comments", showAllComments);
 router.post("/update-comment/:id", updateComment);
 
 //AUTHOR ROUTES
+
 router.post("/register-author", createAuthor);
 
 router.get("/view-author/:id", viewAuthor);
