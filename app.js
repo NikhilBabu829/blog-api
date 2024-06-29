@@ -50,17 +50,23 @@ app.use(passport.session());
 
 const mongoURL = "mongodb://127.0.0.1:27017/?retryWrites=true&w=majority&appName=Cluster0";
 
+tunnel(config, function(error, serer){
+  if(error){
+    console.error('SSH connection error:', error);
+    return;
+  }
+  mongoose.connect(mongoURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    user: process.env.MONGO_CONNECTION_USERNAME,
+    pass: process.env.MONGO_CONNECTION_PASSWORD
+  }).then(() => {
+    console.log('Connected to MongoDB');
+  }).catch(err => {
+    console.error('Error connecting to MongoDB', err);
+  })
+})
 
-mongoose.connect(mongoURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  user: process.env.MONGO_CONNECTION_USERNAME,
-  pass: process.env.MONGO_CONNECTION_PASSWORD
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch(err => {
-  console.error('Error connecting to MongoDB', err);
-});
 
 app.use('/api', apiRouter);
 
