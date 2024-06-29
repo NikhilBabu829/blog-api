@@ -34,7 +34,7 @@ app.use(passport.session());
 main().catch((err)=> console.log(err));
 
 async function main(){
-  await mongoose.connect(process.env.MONGO_CONNECTION_LINK);
+  await mongoose.connect(`mongodb+srv://${process.env.MONGO_CONNECTION_USERNAME}:${process.env.MONGO_CONNECTION_PASSWORD}@cluster0.mfhweoz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
 }
 
 app.use('/api', apiRouter);
