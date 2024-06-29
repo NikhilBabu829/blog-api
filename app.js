@@ -18,21 +18,6 @@ const AUTHOR = require("./models/author");
 
 var apiRouter = require('./routes/api');
 
-const qgURL = process.env.QUOTA_GUARD_STATIC_URL;
-const parsedURL = url.parse(qgURL);
-const [username, password] = parsedURL.auth.split(":");
-
-const config = {
-  username : username,
-  password : password,
-  host : parsedURL.hostname,
-  port : parsedURL.port,
-  dstHost : process.env.MONGO_HOST,
-  dstPort : 27017,
-  localHost : "127.0.0.1",
-  localPort : 27017,
-}
-
 var app = express();
 app.use(cors());
 
@@ -47,6 +32,21 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret : process.env.PASSPORT_SECRET, resave : false, saveUninitialized : false}))
 app.use(passport.session());
+
+const qgURL = process.env.QUOTAGUARDSTATIC_URL;
+const parsedURL = url.parse(qgURL);
+const [username, password] = parsedURL.auth.split(":");
+
+const config = {
+  username : username,
+  password : password,
+  host : parsedURL.hostname,
+  port : parsedURL.port,
+  dstHost : process.env.MONGO_HOST,
+  dstPort : 27017,
+  localHost : "127.0.0.1",
+  localPort : 27017,
+}
 
 const mongoURL = "mongodb://127.0.0.1:27017/?retryWrites=true&w=majority&appName=Cluster0";
 
