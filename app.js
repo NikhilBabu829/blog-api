@@ -9,12 +9,29 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
+const tunnel = require("tunnel-ssh");
+const url = require("url");
 require('dotenv').config();
 
 const USER = require("./models/user");
 const AUTHOR = require("./models/author");
 
 var apiRouter = require('./routes/api');
+
+const qgURL = process.env.QUOTA_GUARD_STATIC_URL;
+const parsedURL = url.parse(qgURL);
+const [username, password] = parsedURL.auth.split(":");
+
+const config = {
+  username : username,
+  password : password,
+  host : parsedURL.hostname,
+  port : parsedURL.port,
+  dstHost : process.env.MONGO_HOST,
+  dstPort : 27017,
+  localHost : "127.0.0.1",
+  localPort : 27017,
+}
 
 var app = express();
 app.use(cors());
@@ -31,11 +48,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret : process.env.PASSPORT_SECRET, resave : false, saveUninitialized : false}))
 app.use(passport.session());
 
-main().catch((err)=> console.log(err));
+const mongoURL = "mongodb://127.0.0.1:27017/?retryWrites=true&w=majority&appName=Cluster0";
 
-async function main(){
-  await mongoose.connect(`mongodb+srv://${process.env.MONGO_CONNECTION_USERNAME}:${process.env.MONGO_CONNECTION_PASSWORD}@cluster0.mfhweoz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
-}
+
+mongoose.connect(mongoURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  user: process.env.MONGO_CONNECTION_USERNAME,
+  pass: process.env.MONGO_CONNECTION_PASSWORD
+}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch(err => {
+  console.error('Error connecting to MongoDB', err);
+});
 
 app.use('/api', apiRouter);
 
