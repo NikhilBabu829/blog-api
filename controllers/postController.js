@@ -25,7 +25,7 @@ exports.createPost = asyncHandler(async (req, res)=>{
 
 exports.getPosts = asyncHandler(async (req, res)=>{
     const posts = await POST.find();
-    if(post){
+    if(posts){
         res.json(posts);
     }
 })
