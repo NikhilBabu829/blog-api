@@ -9,7 +9,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
-const tunnel = require("tunnel-ssh");
+const {createTunnel} = require("tunnel-ssh");
 const url = require("url");
 require('dotenv').config();
 
@@ -48,13 +48,14 @@ const config = {
   localPort : 27017,
 }
 
-const mongoURL = "mongodb://127.0.0.1:27017/?retryWrites=true&w=majority&appName=Cluster0";
-
-tunnel(config, function(error, serer){
+createTunnel(config, (error, serer)=>{
   if(error){
     console.error('SSH connection error:', error);
     return;
   }
+
+  const mongoURL = "mongodb://127.0.0.1:27017/?retryWrites=true&w=majority&appName=Cluster0";
+
   mongoose.connect(mongoURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -66,7 +67,6 @@ tunnel(config, function(error, serer){
     console.error('Error connecting to MongoDB', err);
   })
 })
-
 
 app.use('/api', apiRouter);
 
