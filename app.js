@@ -46,6 +46,11 @@ const config = {
   dstPort : 27017,
   localHost : "127.0.0.1",
   localPort : 27017,
+  tunnelHost: parsedURL.hostname,
+  tunnelPort: 22,
+  dstPort: process.env.MONGO_HOST || 27017,
+  localHost: '127.0.0.1',
+  localPort: 27017
 }
 
 createTunnel(config, (error, serer)=>{
