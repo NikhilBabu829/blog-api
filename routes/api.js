@@ -21,7 +21,7 @@ function authMiddleWare(req, res, next){
 router.post("/user-login", passport.authenticate("user-local", {session : false}), (req, res)=>{
   const user = req.user;
   const token = jwt.sign({id : user.id, username : user.username, exp : Math.floor(Date.now()/1000) + (60*60*6)}, process.env.JWT_SECRET);
-  return res.json({token});
+  return res.json({token, user});
 });
 
 router.get('/view-users', view_Users);
