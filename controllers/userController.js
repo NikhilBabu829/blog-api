@@ -31,7 +31,7 @@ exports.user_Sign_Up = asyncHandler(async (req,res,next)=>{
 })
 
 exports.view_User = asyncHandler(async (req, res, next)=>{
-    const user = await USER.findById(req.params.id);
+    const user = req.user;
     if(user){
         res.json(user);
     }
@@ -42,7 +42,7 @@ exports.view_User = asyncHandler(async (req, res, next)=>{
 })
 
 exports.update_User = asyncHandler(async (req, res, next)=>{
-    const user = await USER.findById(req.params.id);
+    const user = req.user
     if(user){
         bcrypt.hash(req.body.password, 10, async(err, hashedPassword)=>{
             if(err){
@@ -65,7 +65,7 @@ exports.update_User = asyncHandler(async (req, res, next)=>{
 })
 
 exports.delete_User = asyncHandler(async (req, res, next)=>{
-    const user = await USER.findById(req.params.id);
+    const user = req.user;
     if(user){
         await USER.findByIdAndDelete(req.params.id);
         res.json({message : "User deleted successfully", user});
