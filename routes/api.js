@@ -26,24 +26,24 @@ router.post("/user-login", passport.authenticate("user-local", {session : false}
 
 router.get('/view-users', view_Users);
 
-router.get('/view-user/:id', view_User);
+router.get('/view-user', authMiddleWare, view_User);
 
-router.post('/update-user/:id', authMiddleWare, update_User);
+router.post('/update-user', authMiddleWare, update_User);
 
-router.post('/delete-user/:id', authMiddleWare, delete_User);
+router.post('/delete-user', authMiddleWare, delete_User);
 
 router.post('/user-sign-up', user_Sign_Up);
 
 //COMMENT ROUTES
 router.post("/create-comment", authMiddleWare, createComment);
 
-router.get("/view-comment/:id", showOneComment);
+router.get("/view-comment", showOneComment);
 
-router.post("/delete-comment/:id", authMiddleWare, deleteComment);
+router.post("/delete-comment", authMiddleWare, deleteComment);
 
 router.get("/view-comments", showAllComments);
 
-router.post("/update-comment/:id", authMiddleWare, updateComment);
+router.post("/update-comment", authMiddleWare, updateComment);
 
 //AUTHOR ROUTES
 
@@ -55,7 +55,7 @@ router.post("/login-author", passport.authenticate("author-local", {session : fa
 
 router.post("/register-author", createAuthor);
 
-router.get("/view-author/:id", viewAuthor);
+router.get("/view-author",authMiddleWare, viewAuthor);
 
 router.post("/update-author/:id", authMiddleWare, editAuthor);
 
