@@ -34,6 +34,15 @@ router.post('/delete-user', authMiddleWare, delete_User);
 
 router.post('/user-sign-up', user_Sign_Up);
 
+router.post("/user-logout", authMiddleWare, (req,res)=>{
+  req.logout((err)=>{
+    if(err){
+      res.json({"message" : "Failed to Logout"})
+    }
+    res.status(200).json({"message" : "Logged Out successfully"})
+  })
+})
+
 //COMMENT ROUTES
 router.post("/create-comment", authMiddleWare, createComment);
 
