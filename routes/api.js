@@ -63,7 +63,7 @@ router.post("/login-author", passport.authenticate("author-local", {session : fa
 
 router.post("/register-author", createAuthor);
 
-router.get("/view-author",authMiddleWare, viewAuthor);
+router.get("/view-author/:id", viewAuthor);
 
 router.post("/update-author/:id", authMiddleWare, editAuthor);
 
