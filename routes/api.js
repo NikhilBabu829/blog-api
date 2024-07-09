@@ -55,7 +55,6 @@ router.get("/view-comments", showAllComments);
 router.post("/update-comment", authMiddleWare, updateComment);
 
 //AUTHOR ROUTES
-
 router.post("/login-author", passport.authenticate("author-local", {session : false}), (req, res)=>{
   const author = req.user;
   const token = jwt.sign({id : author.id, username : author.username}, process.env.JWT_SECRET);

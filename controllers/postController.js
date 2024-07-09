@@ -3,6 +3,8 @@ const asyncHandler = require("express-async-handler");
 
 exports.createPost = asyncHandler(async (req, res)=>{
     const author = req.user;
+    console.log("came from post")
+    console.log(author);
     if(!author.cannotPost){
         const {title, content} = req.body;
         const userOrAuthor = req.user;
@@ -11,7 +13,7 @@ exports.createPost = asyncHandler(async (req, res)=>{
         const post = {
             title,
             content,
-            author : author._id,
+            author : author.id,
             time,
         }
         const createdPost = new POST(post);
