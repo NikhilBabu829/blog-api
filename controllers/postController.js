@@ -3,12 +3,9 @@ const asyncHandler = require("express-async-handler");
 
 exports.createPost = asyncHandler(async (req, res)=>{
     const author = req.user;
-    console.log("came from post")
-    console.log(author);
     if(!author.cannotPost){
         const {title, content} = req.body;
         const userOrAuthor = req.user;
-        console.log(userOrAuthor);
         const time = new Date().getTime();
         const post = {
             title,
