@@ -20,19 +20,19 @@ exports.createComment = asyncHandler(async (req, res, next)=>{
     const testForUser = await COMMENT_AUTH.findOne({user : idOfUser});
     const testForAuthor = await COMMENT_AUTH.findOne({author : idOfUser});
     if(testForUser || testForAuthor){
-        commentAuthor = testForAuthor._id;
+        commentAuthor = idOfUser;
     }
     else{
-        commentAuthor = new COMMENT_AUTH({user : idOfUser});
-        await commentAuthor.save();
+        const newAuthor = new COMMENT_AUTH({user : idOfUser});
+        await newAuthor.save();
+        commentAuthor = newAuthor._id;
     }
-    const comment = {
+    const newComment = new COMMENT({
         comment_content : comment_content,
-        author : commentAuthor._id,
+        author : commentAuthor,
         post : postId,
         time : time
-    }
-    const newComment = new COMMENT(comment);
+    });
     await newComment.save();
     res.status(200).json({"message" : "comment added", newComment});
 })
