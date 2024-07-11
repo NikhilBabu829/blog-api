@@ -24,10 +24,8 @@ exports.createComment = asyncHandler(async (req, res, next)=>{
     }
     else{
         commentAuthor = new COMMENT_AUTH({user : idOfUser});
+        await commentAuthor.save();
     }
-
-    //TODO get the post id, and set the comment to that particula post.
-    await commentAuthor.save();
     const comment = {
         comment_content : comment_content,
         author : commentAuthor._id,
