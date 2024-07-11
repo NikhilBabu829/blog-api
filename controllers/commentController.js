@@ -12,15 +12,26 @@ exports.showAllComments = asyncHandler(async (req,res,next)=>{
 })
 
 exports.createComment = asyncHandler(async (req, res, next)=>{
-    const {comment_content} = req.body;
+    const {comment_content, postId} = req.body;
     const time = new Date().getTime();
     const user = req.user;
     const idOfUser = user.id;
-    const commentAuthor = new COMMENT_AUTH({user : idOfUser});
+    let commentAuthor;
+    const testForUser = await COMMENT_AUTH.findOne({user : idOfUser});
+    const testForAuthor = await COMMENT_AUTH.findOne({author : idOfUser});
+    if(testForUser || testForAuthor){
+        commentAuthor = testForAuthor._id;
+    }
+    else{
+        commentAuthor = new COMMENT_AUTH({user : idOfUser});
+    }
+
+    //TODO get the post id, and set the comment to that particula post.
     await commentAuthor.save();
     const comment = {
         comment_content : comment_content,
         author : commentAuthor._id,
+        post : postId,
         time : time
     }
     const newComment = new COMMENT(comment);
