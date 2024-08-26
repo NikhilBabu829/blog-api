@@ -7,7 +7,7 @@ exports.createAuthor = asyncHandler(async (req, res)=>{
     const check = await AUTHOR.findOne({username: username});
     if(check){
         res.status(400).json({"message" : "User already exists"});
-    } 
+    }
     else{
         bcrypt.hash(password, 10, async(err, hashedPassword)=>{
             if(err){

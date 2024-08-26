@@ -5,6 +5,7 @@ const {view_Users, user_Sign_Up, view_User, update_User, delete_User} = require(
 const {createComment, showOneComment, deleteComment, showAllComments, updateComment} = require("../controllers/commentController");
 const {createAuthor, editAuthor, deleteAuthor, viewAuthor} = require("../controllers/authorController");
 const {deletePost, editPost, getPost, getPosts, createPost} = require("../controllers/postController");
+const { viewCommentAuth } = require("../controllers/commentAuthController");
 const passport = require("passport");
 
 function authMiddleWare(req, res, next){
@@ -79,5 +80,8 @@ router.post("/create-post", authMiddleWare, createPost);
 router.post("/edit-post/:id", authMiddleWare, editPost);
 
 router.post("/delete-post/:id", authMiddleWare, deletePost);
+
+//COMMENT AUTHOR ROUTES
+router.get("/view-comment-author", viewCommentAuth);
 
 module.exports = router;
