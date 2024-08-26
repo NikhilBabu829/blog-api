@@ -20,7 +20,7 @@ exports.createComment = asyncHandler(async (req, res, next)=>{
     const testForUser = await COMMENT_AUTH.findOne({user : idOfUser});
     const testForAuthor = await COMMENT_AUTH.findOne({author : idOfUser});
     if(testForUser || testForAuthor){
-        commentAuthor = idOfUser;
+        commentAuthor = testForUser || testForAuthor ? testForUser : testForAuthor;
     }
     else{
         const newAuthor = new COMMENT_AUTH({user : idOfUser});
