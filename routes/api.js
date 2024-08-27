@@ -82,6 +82,6 @@ router.post("/edit-post/:id", authMiddleWare, editPost);
 router.post("/delete-post/:id", authMiddleWare, deletePost);
 
 //COMMENT AUTHOR ROUTES
-router.get("/view-comment-author", viewCommentAuth);
+router.post("/view-comment-author", viewCommentAuth);
 
 module.exports = router;
