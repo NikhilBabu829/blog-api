@@ -49,7 +49,7 @@ exports.showOneComment = asyncHandler(async (req, res, next) => {
 })
 
 exports.deleteComment = asyncHandler(async (req, res, next)=>{
-    const {id} = req.params;
+    const {id} = req.body;
     const comment = await COMMENT.findById(id);
     if(comment){
         if(comment.author == req.user._id){
