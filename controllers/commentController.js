@@ -53,7 +53,7 @@ exports.deleteComment = asyncHandler(async (req, res, next)=>{
     const comment = await COMMENT.findById(id);
     if(comment){
         if(comment.author == req.user._id){
-            const deletedComment = await COMMENT.findByIdAndDelete(req.params.id);
+            const deletedComment = await COMMENT.findByIdAndDelete(id);
             res.json({"message" : "deleted successfully", deletedComment})
         }
         else{
