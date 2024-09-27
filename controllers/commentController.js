@@ -51,8 +51,11 @@ exports.showOneComment = asyncHandler(async (req, res, next) => {
 exports.deleteComment = asyncHandler(async (req, res, next)=>{
     const {id} = req.body;
     const comment = await COMMENT.findById(id);
+    const commentAuth = await fetch(`https://blog-api-odin-52edb7119820.herokuapp.com/api/view-comment-author`, {method : "POST", headers: {'Content-Type': 'application/json'}, body : JSON.stringify({author_id : comment.author.toString()})})
+    const commentAuthData = await commentAuth.json();
+    const commentAuthor = commentAuthData.check[0].user;
     if(comment){
-        if(comment.author == req.user._id){
+        if(commentAuthor == req.user.id){
             const deletedComment = await COMMENT.findByIdAndDelete(id);
             res.json({"message" : "deleted successfully", deletedComment})
         }
