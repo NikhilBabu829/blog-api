@@ -67,7 +67,7 @@ exports.update_User = asyncHandler(async (req, res, next)=>{
 exports.delete_User = asyncHandler(async (req, res, next)=>{
     const user = req.user;
     if(user){
-        await USER.findByIdAndDelete(req.params.id);
+        await USER.findByIdAndDelete(user.id);
         res.json({message : "User deleted successfully", user});
     }
     else{
